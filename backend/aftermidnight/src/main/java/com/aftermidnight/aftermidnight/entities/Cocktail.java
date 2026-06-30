@@ -1,42 +1,63 @@
 package com.aftermidnight.aftermidnight.entities;
 
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "cocktails")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Cocktail {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CO_ID")
-    private Integer id;
+    @GeneratedValue
+    private UUID id;
 
-    @Column(name = "CO_NAME", nullable = false)
-    private String name;
-
-    @Column(name = "CO_Ingredients", columnDefinition = "TEXT")
-    private String ingredients;
-
-    @Column(name = "CO_PRICE", nullable = false)
-    private Double price;
-
-    @OneToOne(mappedBy = "cocktail", targetEntity = Category.class, fetch=FetchType.LAZY)
+    // Côté propriétaire : Cocktail porte la colonne category_id.
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @OneToMany(mappedBy = "cocktail", targetEntity = CocktailSize.class, fetch=FetchType.LAZY)
-    private List<CocktailSize> cocktailSizes;
+    @Column(nullable = false, length = 100)
+    private String name;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String ingredients;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column
+    private Integer position = 0;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
+
+    @OneToMany(mappedBy = "cocktail", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CocktailSize> sizes = new ArrayList<>();
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = Instant.now();
+    }
 }

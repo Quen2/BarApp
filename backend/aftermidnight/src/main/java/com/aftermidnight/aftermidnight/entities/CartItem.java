@@ -1,34 +1,42 @@
 package com.aftermidnight.aftermidnight.entities;
 
+import java.util.UUID;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
+@Table(name = "cart_items")
 @Getter
 @Setter
-@Table(name = "cart_items")
-@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class CartItem {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CI_ID")
-    private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @Id
+    @GeneratedValue
+    private UUID id;
+
+    // Côté propriétaire : CartItem porte la colonne cart_id.
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
-    @OneToOne(mappedBy = "cartItem", targetEntity = CocktailSize.class, fetch=FetchType.EAGER)
+    // Côté propriétaire : CartItem porte la colonne cocktail_size_id.
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "cocktail_size_id", nullable = false)
     private CocktailSize cocktailSize;
 
-    @Column(name = "CI_QUANTITY", nullable = false)
-    private Integer quantity;
+    @Column(nullable = false)
+    private Integer quantity = 1;
 }

@@ -1,37 +1,53 @@
 package com.aftermidnight.aftermidnight.entities;
 
+import java.time.Instant;
+import java.util.UUID;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
+@Table(name = "order_items")
 @Getter
 @Setter
-@Table(name = "order_items")
-@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderItem {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "OI_ID")
-    private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @Id
+    @GeneratedValue
+    private UUID id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @OneToOne(mappedBy = "orderItem", targetEntity = CocktailSize.class, fetch=FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "cocktail_size_id", nullable = false)
     private CocktailSize cocktailSize;
 
-    @Column(name="OI_Status", nullable = false)
+    @Column(nullable = false, length = 30)
     private String status;
 
-    @Column(name = "OI_QUANTITY", nullable = false)
-    private Integer quantity;
+    @Column(nullable = false)
+    private Integer quantity = 1;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = Instant.now();
+    }
 }
