@@ -25,6 +25,9 @@ public class Barmaker {
 
     @Column(name = "BA_Email", nullable = false)
     private String email;
+
+    @Column(name = "password_hash", nullable = false, length = 255)
+    private String passwordHash;
     
     
 }

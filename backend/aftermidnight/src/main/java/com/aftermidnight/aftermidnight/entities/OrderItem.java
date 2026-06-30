@@ -31,4 +31,7 @@ public class OrderItem {
 
     @Column(name="OI_Status", nullable = false)
     private String status;
+
+    @Column(name = "OI_QUANTITY", nullable = false)
+    private Integer quantity;
 }
