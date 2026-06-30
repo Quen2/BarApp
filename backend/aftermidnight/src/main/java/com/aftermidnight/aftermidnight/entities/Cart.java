@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,7 +37,7 @@ public class Cart {
     @GeneratedValue
     private UUID id;
 
-    // Côté propriétaire : Cart porte la colonne client_id.
+    @JsonBackReference
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "client_id", nullable = false, unique = true)
     private Client client;
@@ -45,6 +48,7 @@ public class Cart {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
+    @JsonIgnoreProperties("cart")
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> items = new ArrayList<>();
 

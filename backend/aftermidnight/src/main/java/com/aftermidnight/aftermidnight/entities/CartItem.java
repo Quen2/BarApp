@@ -2,6 +2,8 @@ package com.aftermidnight.aftermidnight.entities;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,7 +29,7 @@ public class CartItem {
     @GeneratedValue
     private UUID id;
 
-    // Côté propriétaire : CartItem porte la colonne cart_id.
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;

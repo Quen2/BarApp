@@ -3,6 +3,8 @@ package com.aftermidnight.aftermidnight.entities;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,7 +29,8 @@ public class CocktailSize {
     @Id
     @GeneratedValue
     private UUID id;
-
+    
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "cocktail_id", nullable = false)
     private Cocktail cocktail;

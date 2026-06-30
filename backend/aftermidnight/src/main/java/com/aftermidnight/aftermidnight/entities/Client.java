@@ -3,6 +3,8 @@ package com.aftermidnight.aftermidnight.entities;
 import java.time.Instant;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,7 +33,7 @@ public class Client {
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
-    // Côté non-propriétaire : c'est Cart qui porte la colonne client_id.
+    @JsonManagedReference
     @OneToOne(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;
 
