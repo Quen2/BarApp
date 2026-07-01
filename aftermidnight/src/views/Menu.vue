@@ -1,150 +1,181 @@
 <template>
   <div class="menu">
+
+    <!-- HEADER -->
     <header class="header">
-      <h1>🍸 Carte du bar</h1>
-      <p v-if="tableId">Table {{ tableId }}</p>
+      <div class="title">
+        🍸 AFTER MIDNIGHT
+      </div>
+
+      <div class="sub">
+        {{ tableId ? `TABLE ${tableId}` : "" }}
+      </div>
     </header>
 
-    <div v-if="loading">Chargement...</div>
+    <!-- LOADING -->
+    <div v-if="loading" class="loading">
+      loading cocktails...
+    </div>
 
-    <div v-else>
-        <div
-            v-for="category in categories"
-            :key="category.id"
-            class="category"
-        >
-            <h2 class="category-title">
-            {{ category.name }}
-            </h2>
+    <!-- CONTENT -->
+    <div v-else class="content">
 
-            <MenuItem
+      <section
+        v-for="category in categories"
+        :key="category.id"
+        class="category"
+      >
+        <h2 class="category-title">
+          {{ category.name }}
+        </h2>
+
+        <div class="grid">
+          <MenuItem
             v-for="cocktail in category.cocktails"
             :key="cocktail.id"
             :cocktail="cocktail"
             @add-to-cart="addToCart"
-            />
+          />
         </div>
+
+      </section>
+
     </div>
 
-    <!-- bouton panier simple -->
-    <div class="cart-bar">
-      🛒 Voir panier
-    </div>
+    <!-- CART BUTTON -->
+    <button class="cart-btn">
+      🖤 CART • {{ cartCount }}
+    </button>
+
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue"
 import axios from "axios"
+import MenuItem from "@/components/MenuItem.vue"
 
 const categories = ref([])
 const loading = ref(true)
+const cartCount = ref(0)
 
 const tableId = localStorage.getItem("table_id")
-const clientId = localStorage.getItem("client_id")
 
 onMounted(async () => {
   try {
     const res = await axios.get("http://localhost:8080/api/category")
-    console.log("Categories API response:", res.data)
     categories.value = res.data
   } catch (e) {
-    console.error("Erreur API category", e)
+    console.error(e)
   } finally {
     loading.value = false
   }
+
+  const cart = JSON.parse(localStorage.getItem("cart") || "[]")
+  cartCount.value = cart.length
 })
 
-const addToCart = async (cocktail, size) => {
-  if (!tableId) {
-    alert("Table non détectée")
-    return
-  }
+const addToCart = ({ cocktail, size }) => {
+  const cart = JSON.parse(localStorage.getItem("cart") || "[]")
 
-  const payload = {
-    clientId,
-    tableId,
-    cocktailSizeId: size.id,
+  cart.push({
+    cocktailId: cocktail.id,
+    name: cocktail.name,
+    sizeId: size.id,
+    size: size.size,
+    price: size.price,
     quantity: 1
-  }
+  })
 
+  localStorage.setItem("cart", JSON.stringify(cart))
+  cartCount.value = cart.length
 }
 </script>
 
 <style scoped>
+/* ===== BASE ===== */
 .menu {
-  padding: 20px;
-  font-family: sans-serif;
-  background: #0f0f0f;
-  color: white;
   min-height: 100vh;
+  background: #0b0b10;
+  color: #f2f2f2;
+  font-family: "Arial", sans-serif;
+  padding: 20px;
+  position: relative;
+  overflow-x: hidden;
 }
 
+/* ===== HEADER ===== */
 .header {
-  margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  letter-spacing: 3px;
+  color: #ff2bd6;
+  text-shadow: 0 0 10px #ff2bd6, 0 0 20px #8a2be2;
+}
+
+.sub {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 5px;
+  letter-spacing: 2px;
+}
+
+/* ===== LOADING ===== */
+.loading {
+  text-align: center;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* ===== CATEGORY ===== */
 .category {
   margin-bottom: 40px;
 }
 
 .category-title {
-  font-size: 20px;
-  margin-bottom: 10px;
-  border-left: 4px solid #42b983;
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #00f5ff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-left: 3px solid #ff2bd6;
   padding-left: 10px;
 }
 
-.cocktails {
+/* ===== GRID ===== */
+.grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 15px;
 }
 
-.cocktail-card {
-  background: #1b1b1b;
-  padding: 15px;
-  border-radius: 12px;
-  border: 1px solid #2a2a2a;
-}
-
-.desc {
-  font-size: 14px;
-  opacity: 0.8;
-}
-
-.ingredients {
-  font-size: 12px;
-  opacity: 0.6;
-  margin-bottom: 10px;
-}
-
-.sizes {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-button {
-  padding: 6px 10px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background: #42b983;
-  color: white;
-}
-
-button:hover {
-  opacity: 0.8;
-}
-
-.cart-bar {
+/* ===== CART BUTTON ===== */
+.cart-btn {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: #42b983;
-  padding: 12px 18px;
-  border-radius: 30px;
+
+  background: linear-gradient(135deg, #ff2bd6, #8a2be2);
+  border: none;
+  color: white;
+
+  padding: 14px 18px;
+  border-radius: 40px;
+
+  font-weight: bold;
   cursor: pointer;
+
+  box-shadow: 0 0 15px rgba(255, 43, 214, 0.5);
+  transition: 0.2s;
+}
+
+.cart-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(255, 43, 214, 0.8);
 }
 </style>
