@@ -12,23 +12,23 @@ const router = createRouter({
     {
       path: '/table/:id',
       name: 'table',
-      component: () => import('@/components/StockTableNumber.vue')
+      component: () => import('@/components/StockTableNumber.vue'),
     },
     {
       path: '/menu',
       name: 'menu',
-      component: () => import('@/views/Menu.vue')
+      component: () => import('@/views/Menu.vue'),
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('@/views/Login.vue')
+      component: () => import('@/views/Login.vue'),
     },
     {
       path: '/orders',
       name: 'orders',
-      component: () => import('@/views/OrderList.vue')
-    }
+      component: () => import('@/views/OrderList.vue'),
+    },
   ],
 })
 

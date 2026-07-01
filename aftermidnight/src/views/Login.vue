@@ -1,17 +1,12 @@
 <template>
   <div class="min-h-screen flex items-center justify-center bg-[#1E1B18] text-[#E8E2D9] px-6">
-
     <div class="w-full max-w-sm">
-
-    <div class="mb-10 text-center">
-        <h1 class="text-3xl font-bold tracking-widest">
-          AFTER MIDNIGHT
-        </h1>
+      <div class="mb-10 text-center">
+        <h1 class="text-3xl font-bold tracking-widest">AFTER MIDNIGHT</h1>
       </div>
 
       <!-- FORM -->
       <form @submit.prevent="login" class="flex flex-col gap-4">
-
         <input
           v-model="email"
           type="email"
@@ -32,26 +27,23 @@
         >
           Se connecter
         </button>
-
       </form>
 
       <!-- ERROR -->
       <p v-if="error" class="text-red-400 text-sm mt-4 text-center">
         {{ error }}
       </p>
-
     </div>
-
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue"
-import axios from "axios"
-import { useRouter } from "vue-router"
+import { ref } from 'vue'
+import axios from 'axios'
+import { useRouter } from 'vue-router'
 
-const email = ref("")
-const password = ref("")
+const email = ref('')
+const password = ref('')
 const error = ref(null)
 
 const router = useRouter()
@@ -60,23 +52,19 @@ const login = async () => {
   error.value = null
 
   try {
-    const res = await axios.post(
-      "http://localhost:8080/api/barmakers/login",
-      {
-        email: email.value,
-        password: password.value
-      }
-    )
+    const res = await axios.post('http://localhost:8080/api/barmakers/login', {
+      email: email.value,
+      password: password.value,
+    })
 
     const barmaker = res.data
 
-    localStorage.setItem("barmaker_id", barmaker.id)
-    localStorage.setItem("barmaker_name", barmaker.name)
+    localStorage.setItem('barmaker_id', barmaker.id)
+    localStorage.setItem('barmaker_name', barmaker.name)
 
-    router.push("/orders")
-
+    router.push('/orders')
   } catch (e) {
-    error.value = "Combinaison email/mot de passe invalide"
+    error.value = 'Combinaison email/mot de passe invalide'
   }
 }
 </script>

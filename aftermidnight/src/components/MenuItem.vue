@@ -1,5 +1,7 @@
 <template>
-  <div class="cocktail-card border border-[#6B6B6B] rounded p-4 flex flex-col items-center mt-2 border-dotted">
+  <div
+    class="cocktail-card border border-[#6B6B6B] rounded p-4 flex flex-col items-center mt-2 border-dotted"
+  >
     <h3 class="text-lg font-bold">{{ cocktail.name }}</h3>
     <p class="text-sm">{{ cocktail.ingredients }}</p>
     <div class="flex justify-center gap-2 mt-2">
@@ -19,16 +21,16 @@
 const props = defineProps({
   cocktail: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 })
 
-const emit = defineEmits(["add-to-cart"])
+const emit = defineEmits(['add-to-cart'])
 
 const emitAddToCart = (size) => {
-  emit("add-to-cart", {
+  emit('add-to-cart', {
     cocktail: props.cocktail,
-    size
+    size,
   })
 }
 </script>

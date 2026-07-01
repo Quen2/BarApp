@@ -1,15 +1,15 @@
 <script setup>
-import { onMounted } from "vue"
-import { useRoute, useRouter } from "vue-router"
+import { onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
 
 onMounted(() => {
-    const tableId = route.params.id
+  const tableId = route.params.id
 
-    localStorage.setItem("table_id", tableId)
-    router.replace("/")
+  localStorage.setItem('table_id', tableId)
+  router.replace('/')
 })
 </script>
 
