@@ -104,8 +104,7 @@ const total = computed(() =>
 
 const createOrder = async () => {
   try {
-    console.log(localStorage.getItem("client_id"))
-    await axios.post("http://localhost:8080/api/order", {
+    const res = await axios.post("http://localhost:8080/api/order", {
       clientId: localStorage.getItem("client_id"),
       tableNumber: Number(tableId),
       items: items.value.map(i => ({
@@ -115,8 +114,7 @@ const createOrder = async () => {
     })
 
     localStorage.removeItem("cart")
-
-    router.push("/orders")
+    router.push(`/order/${res.data.id}`)
 
   } catch (e) {
     console.error(e)

@@ -13,6 +13,7 @@
         v-for="order in orders"
         :key="order.id"
         class="bg-[#141414] border border-[#2a2a2a] rounded-xl p-4"
+        @click="navigateToOrder(order)"
       >
         <div class="flex justify-between items-start mb-3">
           <div>
@@ -60,9 +61,15 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import { useRouter } from 'vue-router'
 
 const orders = ref([])
 const loading = ref(true)
+const router = useRouter()
+
+const navigateToOrder = (order) => {
+  router.push(`barmaker/order/${order.id}`)
+}
 
 onMounted(async () => {
   try {
