@@ -39,8 +39,13 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Order>> getOrders () {
-        return ResponseEntity.ok(orderService.getOrders());
+    public ResponseEntity<List<OrderResponseDTO>> getOrders() {
+        List<OrderResponseDTO> orders = orderService.getOrders()
+                .stream()
+                .map(orderMapper::toResponse)
+                .toList();
+
+        return ResponseEntity.ok(orders);
     }
 
     @GetMapping("/{id}")

@@ -7,8 +7,14 @@ import com.aftermidnight.aftermidnight.entities.Order;
 
 @Component
 public class OrderMapper {
-    
-    public OrderResponseDTO toResponse (Order order) {
+
+    private final OrderItemMapper orderItemMapper;
+
+    public OrderMapper(OrderItemMapper orderItemMapper) {
+        this.orderItemMapper = orderItemMapper;
+    }
+
+    public OrderResponseDTO toResponse(Order order) {
         return new OrderResponseDTO(
             order.getId(),
             order.getClient(),
@@ -17,6 +23,9 @@ public class OrderMapper {
             order.getCreatedAt(),
             order.getUpdatedAt(),
             order.getItems()
+                .stream()
+                .map(orderItemMapper::toResponse)
+                .toList()
         );
     }
 }

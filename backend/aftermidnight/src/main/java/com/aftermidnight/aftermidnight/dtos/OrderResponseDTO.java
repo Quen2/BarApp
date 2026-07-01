@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.UUID;
 
 import com.aftermidnight.aftermidnight.entities.Client;
-import com.aftermidnight.aftermidnight.entities.OrderItem;
 
 public record  OrderResponseDTO (
     UUID id,
@@ -14,5 +13,5 @@ public record  OrderResponseDTO (
     Integer tableNumber,
     Instant createdAt,
     Instant updatedAt,
-    List<OrderItem> orderItems
+    List<OrderItemResponseDTO> orderItems
 ){}
