@@ -103,6 +103,7 @@ CREATE TABLE orders (
     client_id    UUID NOT NULL REFERENCES clients(id) ON DELETE CASCADE,
     status       VARCHAR(30) NOT NULL DEFAULT 'COMMANDEE'
         CHECK (status IN ('COMMANDEE', 'EN_COURS_DE_PREPARATION', 'TERMINEE')),
+    table_number INTEGER NOT NULL DEFAULT 1,
     created_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at   TIMESTAMPTZ NOT NULL DEFAULT now()
 );

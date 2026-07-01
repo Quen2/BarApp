@@ -44,6 +44,9 @@ public class Order {
     @Column(nullable = false, length = 30)
     private String status;
 
+    @Column(name = "table_number", nullable = false)
+    private Integer tableNumber;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 

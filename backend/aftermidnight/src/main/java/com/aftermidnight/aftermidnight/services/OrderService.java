@@ -22,6 +22,7 @@ public class OrderService {
         order.setClient(request.client());
         order.setItems(request.orderItems());
         order.setStatus(request.status());
+        order.setTableNumber(request.tableNumber());
 
         return orderRepository.save(order);
     }

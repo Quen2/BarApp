@@ -11,6 +11,7 @@ public record  OrderResponseDTO (
     UUID id,
     Client client,
     String status,
+    Integer tableNumber,
     Instant createdAt,
     Instant updatedAt,
     List<OrderItem> orderItems

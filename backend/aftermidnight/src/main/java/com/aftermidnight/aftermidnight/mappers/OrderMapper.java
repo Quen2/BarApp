@@ -13,6 +13,7 @@ public class OrderMapper {
             order.getId(),
             order.getClient(),
             order.getStatus(),
+            order.getTableNumber(),
             order.getCreatedAt(),
             order.getUpdatedAt(),
             order.getItems()

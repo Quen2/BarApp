@@ -8,5 +8,6 @@ import com.aftermidnight.aftermidnight.entities.OrderItem;
 public record OrderCreateRequest(
     Client client,
     String status,
+    Integer tableNumber,
     List<OrderItem> orderItems
 ) {}
