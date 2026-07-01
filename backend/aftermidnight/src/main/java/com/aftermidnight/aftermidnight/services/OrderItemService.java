@@ -47,4 +47,18 @@ public class OrderItemService {
     public List<OrderItem> getOrderItems() {
         return orderItemRepository.findAll();
     }
+
+    public OrderItem nextStep(UUID id) {
+    OrderItem item = orderItemRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Not found"));
+
+        switch (item.getStatus()) {
+            case "PREPARATION_INGREDIENTS" -> item.setStatus("ASSEMBLAGE");
+            case "ASSEMBLAGE" -> item.setStatus("DRESSAGE");
+            case "DRESSAGE" -> item.setStatus("TERMINEE");
+            default -> {}
+        }
+
+        return orderItemRepository.save(item);
+    }
 }
