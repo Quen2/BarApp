@@ -1,15 +1,13 @@
 <template>
-  <div class="cocktail-card">
-    <h3>{{ cocktail.name }}</h3>
-
-    <p class="desc">{{ cocktail.description }}</p>
-    <p class="ingredients">{{ cocktail.ingredients }}</p>
-
-    <div class="sizes">
+  <div class="cocktail-card border border-[#6B6B6B] rounded p-4 flex flex-col items-center mt-2 border-dotted">
+    <h3 class="text-lg font-bold">{{ cocktail.name }}</h3>
+    <p class="text-sm">{{ cocktail.ingredients }}</p>
+    <div class="flex justify-center gap-2 mt-2">
       <button
         v-for="size in cocktail.sizes"
         :key="size.id"
         @click="emitAddToCart(size)"
+        class="text-sm font-bold bg-[#8B1F14] hover:bg-[#8D1820] text-[#E8E2D9] py-1 px-3 rounded cursor-pointer flex justify-center gap-2"
       >
         {{ size.size }} • {{ size.price }}€
       </button>
@@ -34,42 +32,3 @@ const emitAddToCart = (size) => {
   })
 }
 </script>
-
-<style scoped>
-.cocktail-card {
-  background: #1b1b1b;
-  padding: 15px;
-  border-radius: 12px;
-  border: 1px solid #2a2a2a;
-}
-
-.desc {
-  font-size: 14px;
-  opacity: 0.8;
-}
-
-.ingredients {
-  font-size: 12px;
-  opacity: 0.6;
-  margin-bottom: 10px;
-}
-
-.sizes {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-button {
-  padding: 6px 10px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background: #42b983;
-  color: white;
-}
-
-button:hover {
-  opacity: 0.8;
-}
-</style>

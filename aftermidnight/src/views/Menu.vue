@@ -1,34 +1,45 @@
 <template>
-  <div class="menu">
-
-    <!-- HEADER -->
-    <header class="header">
-      <div class="title">
-        🍸 AFTER MIDNIGHT
-      </div>
-
-      <div class="sub">
-        {{ tableId ? `TABLE ${tableId}` : "" }}
-      </div>
-    </header>
-
-    <!-- LOADING -->
-    <div v-if="loading" class="loading">
-      loading cocktails...
+  <div class="w-screen h-screen flex flex-col bg-[#1E1B18] text-[#E8E2D9]">
+  
+  <header class="flex justify-between w-full p-4 shrink-0">
+    <div class="title">
+      <span>AFTER</span>
+      <span class="text-[#8B1F14]">M</span>
+      <span>IDNIGHT</span>
     </div>
 
-    <!-- CONTENT -->
-    <div v-else class="content">
+    <div class="flex gap-4 items-center">
+        <span class="text-lg text-[#8B1F14] font-bold">{{ tableId ? `Table ${tableId}` : "" }}</span>
+        <button class="relative text-sm font-bold bg-[#8B1F14] hover:bg-[#8D1820] text-[#E8E2D9] py-1 px-3 rounded cursor-pointer">
+        Panier
+            <span
+                v-if="cartCount > 0"
+                class="absolute -top-2 -right-2 bg-white text-black text-xs w-5 h-5 flex items-center justify-center rounded-full"
+            >
+                {{ cartCount }}
+            </span>
+        </button>
+    </div>
+  </header>
+
+  <!-- CONTENT SCROLLABLE -->
+  <main class="flex-1 overflow-y-auto p-4">
+    
+    <div v-if="loading">loading cocktails...</div>
+
+    <div v-else>
+      <p class="text-2xl font-bold">CARTE</p>
+      <p class="text-2xl font-bold text-[#8B1F14]">COCKTAILS</p>
+
+      <p class="text-sm text-[#6B6B6B]">
+        Une sélection de cocktails inspirés de la nuit parisienne.
+      </p>
 
       <section
         v-for="category in categories"
         :key="category.id"
-        class="category"
+        class="mt-6"
       >
-        <h2 class="category-title">
-          {{ category.name }}
-        </h2>
-
         <div class="grid">
           <MenuItem
             v-for="cocktail in category.cocktails"
@@ -42,12 +53,9 @@
 
     </div>
 
-    <!-- CART BUTTON -->
-    <button class="cart-btn">
-      🖤 CART • {{ cartCount }}
-    </button>
+  </main>
 
-  </div>
+</div>
 </template>
 
 <script setup>
@@ -91,91 +99,3 @@ const addToCart = ({ cocktail, size }) => {
   cartCount.value = cart.length
 }
 </script>
-
-<style scoped>
-/* ===== BASE ===== */
-.menu {
-  min-height: 100vh;
-  background: #0b0b10;
-  color: #f2f2f2;
-  font-family: "Arial", sans-serif;
-  padding: 20px;
-  position: relative;
-  overflow-x: hidden;
-}
-
-/* ===== HEADER ===== */
-.header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.title {
-  font-size: 28px;
-  font-weight: bold;
-  letter-spacing: 3px;
-  color: #ff2bd6;
-  text-shadow: 0 0 10px #ff2bd6, 0 0 20px #8a2be2;
-}
-
-.sub {
-  font-size: 12px;
-  opacity: 0.7;
-  margin-top: 5px;
-  letter-spacing: 2px;
-}
-
-/* ===== LOADING ===== */
-.loading {
-  text-align: center;
-  opacity: 0.6;
-  font-style: italic;
-}
-
-/* ===== CATEGORY ===== */
-.category {
-  margin-bottom: 40px;
-}
-
-.category-title {
-  font-size: 18px;
-  margin-bottom: 15px;
-  color: #00f5ff;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  border-left: 3px solid #ff2bd6;
-  padding-left: 10px;
-}
-
-/* ===== GRID ===== */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 15px;
-}
-
-/* ===== CART BUTTON ===== */
-.cart-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-
-  background: linear-gradient(135deg, #ff2bd6, #8a2be2);
-  border: none;
-  color: white;
-
-  padding: 14px 18px;
-  border-radius: 40px;
-
-  font-weight: bold;
-  cursor: pointer;
-
-  box-shadow: 0 0 15px rgba(255, 43, 214, 0.5);
-  transition: 0.2s;
-}
-
-.cart-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 25px rgba(255, 43, 214, 0.8);
-}
-</style>

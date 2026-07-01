@@ -1,61 +1,72 @@
 <template>
-  <div class="orders">
+  <div class="min-h-screen bg-[#1E1B18] text-[#E8E2D9] p-4">
 
-    <header class="header">
-      <h1>🍸 Orders Dashboard</h1>
-      <p>Barman panel</p>
+    <header class="flex justify-between items-center mb-6">
+      <div>
+        <h1 class="text-2xl font-bold text-[#8B1F14]">
+          COMMANDES
+        </h1>
+      </div>
+
+      <div class="text-sm bg-[#8B1F14] px-3 py-1 rounded">
+        LIVE
+      </div>
     </header>
 
-    <div v-if="loading" class="loading">
+    <div v-if="loading" class="text-center text-[#6B6B6B]">
       loading orders...
     </div>
 
-    <div v-else class="grid">
+    <div v-else class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 
       <div
         v-for="order in orders"
         :key="order.id"
-        class="order-card"
+        class="bg-[#141414] border border-[#2a2a2a] rounded-xl p-4"
       >
 
-        <!-- HEADER ORDER -->
-        <div class="order-header">
+        <div class="flex justify-between items-start mb-3">
+
           <div>
-            <h2>Table {{ order.tableNumber }}</h2>
-            <span class="status" :class="order.status">
+            <h2 class="text-lg font-bold">
+              Table {{ order.tableNumber }}
+            </h2>
+
+            <span
+              class="text-xs px-2 py-1 rounded mt-1 inline-block"
+              :class="statusClass(order.status)"
+            >
               {{ formatStatus(order.status) }}
             </span>
           </div>
 
-          <div class="date">
+          <div class="text-xs text-[#6B6B6B]">
             {{ formatDate(order.createdAt) }}
           </div>
+
         </div>
 
-        <!-- ITEMS -->
-        <div class="items">
+        <div class="space-y-2">
 
           <div
             v-for="item in order.items"
             :key="item.id"
-            class="item"
+            class="flex justify-between items-center bg-[#1c1c25] p-2 rounded"
           >
 
-            <div class="item-left">
-              <div class="cocktail">
+            <div class="flex gap-2 items-center">
+              <span class="font-bold">
                 {{ item.cocktailSize.size }}
-              </div>
+              </span>
 
-              <div class="qty">
+              <span class="text-xs text-[#6B6B6B]">
                 x{{ item.quantity }}
-              </div>
-            </div>
-
-            <div class="item-right">
-              <span class="item-status">
-                {{ formatItemStatus(item.status) }}
               </span>
             </div>
+
+            <span class="text-xs" :class="itemStatusClass(item.status)">
+              {{ formatItemStatus(item.status) }}
+            </span>
 
           </div>
 
@@ -78,6 +89,7 @@ const loading = ref(true)
 onMounted(async () => {
   try {
     const res = await axios.get("http://localhost:8080/api/order")
+    console.log(res.data)
     orders.value = res.data
   } finally {
     loading.value = false
@@ -95,11 +107,30 @@ const formatStatus = (status) => {
 
 const formatItemStatus = (status) => {
   switch (status) {
-    case "PREPARATION_INGREDIENTS": return "🧊 Ingredients"
-    case "ASSEMBLAGE": return "🍸 Assemblage"
-    case "DRESSAGE": return "✨ Dressage"
-    case "TERMINEE": return "✅ Terminé"
+    case "PREPARATION_INGREDIENTS": return "Ingredients"
+    case "ASSEMBLAGE": return "Assemblage"
+    case "DRESSAGE": return "Dressage"
+    case "TERMINEE": return "Terminé"
     default: return status
+  }
+}
+
+const statusClass = (status) => {
+  switch (status) {
+    case "COMMANDEE": return "bg-yellow-500 text-black"
+    case "EN_COURS_DE_PREPARATION": return "bg-orange-500 text-black"
+    case "TERMINEE": return "bg-green-600 text-white"
+    default: return "bg-gray-600"
+  }
+}
+
+const itemStatusClass = (status) => {
+  switch (status) {
+    case "PREPARATION_INGREDIENTS": return "text-blue-300"
+    case "ASSEMBLAGE": return "text-orange-300"
+    case "DRESSAGE": return "text-pink-300"
+    case "TERMINEE": return "text-green-400"
+    default: return "text-gray-400"
   }
 }
 
@@ -107,86 +138,3 @@ const formatDate = (date) => {
   return new Date(date).toLocaleTimeString()
 }
 </script>
-
-<style scoped>
-.orders {
-  min-height: 100vh;
-  background: #0b0b10;
-  color: white;
-  padding: 20px;
-  font-family: sans-serif;
-}
-
-/* HEADER */
-.header {
-  margin-bottom: 20px;
-}
-
-/* GRID */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 15px;
-}
-
-/* ORDER CARD */
-.order-card {
-  background: #15151c;
-  border: 1px solid #2a2a2a;
-  border-radius: 12px;
-  padding: 15px;
-}
-
-/* ORDER HEADER */
-.order-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.status {
-  font-size: 12px;
-  padding: 3px 8px;
-  border-radius: 6px;
-  background: #333;
-}
-
-/* ITEMS */
-.items {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.item {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px;
-  background: #1c1c25;
-  border-radius: 8px;
-}
-
-.item-left {
-  display: flex;
-  gap: 10px;
-}
-
-.cocktail {
-  font-weight: bold;
-}
-
-.qty {
-  opacity: 0.7;
-}
-
-.item-status {
-  font-size: 12px;
-  opacity: 0.8;
-}
-
-/* LOADING */
-.loading {
-  opacity: 0.6;
-}
-</style>
