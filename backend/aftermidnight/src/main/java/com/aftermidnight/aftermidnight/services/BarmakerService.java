@@ -1,15 +1,17 @@
 package com.aftermidnight.aftermidnight.services;
 
-import com.aftermidnight.aftermidnight.dtos.BarmakerCreateRequest;
-import com.aftermidnight.aftermidnight.dtos.BarmakerLoginRequest;
-import com.aftermidnight.aftermidnight.entities.Barmaker;
-import com.aftermidnight.aftermidnight.repositories.BarmakerRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.UUID;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
+import com.aftermidnight.aftermidnight.dtos.BarmakerCreateRequest;
+import com.aftermidnight.aftermidnight.dtos.BarmakerLoginRequest;
+import com.aftermidnight.aftermidnight.entities.Barmaker;
+import com.aftermidnight.aftermidnight.repositories.BarmakerRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +32,12 @@ public class BarmakerService {
 
     @Transactional(readOnly = true)
     public Barmaker login(BarmakerLoginRequest request) {
-        Barmaker barmaker = barmakerRepository.findByEmail(request.email()).get();
+        Barmaker barmaker = barmakerRepository.findByEmail(request.email())
+        .orElseThrow(() -> new RuntimeException("User not found"));
 
+        if (!passwordEncoder.matches(request.password(), barmaker.getPasswordHash())) {
+            throw new RuntimeException("Invalid password");
+        }
         return barmaker;
     }
 
