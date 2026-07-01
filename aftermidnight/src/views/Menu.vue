@@ -13,6 +13,7 @@
         }}</span>
         <button
           class="relative text-sm font-bold bg-[#8B1F14] hover:bg-[#8D1820] text-[#E8E2D9] py-1 px-3 rounded cursor-pointer"
+          @click="cart"
         >
           Panier
           <span
@@ -56,12 +57,18 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import MenuItem from '@/components/MenuItem.vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const categories = ref([])
 const loading = ref(true)
 const cartCount = ref(0)
 
 const tableId = localStorage.getItem('table_id')
+
+const cart = () => {
+  router.push('/cart')
+}
 
 onMounted(async () => {
   try {

@@ -2,9 +2,7 @@ package com.aftermidnight.aftermidnight.dtos;
 
 import java.util.UUID;
 
-public record  OrderItemCreateRequest (
-    UUID orderId,
+public record OrderItemRequest(
     UUID cocktailSizeId,
-    String status,
     Integer quantity
-){}
+) {}

@@ -18,13 +18,22 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { onMounted } from 'vue'
+import axios from 'axios'
 import CocktailVector from '@/assets/Cocktail Vector.svg'
 
 const router = useRouter()
 
-const goLogin = () => {
-  router.push('/login')
-}
+onMounted(async () => {
+  try {
+    const res = await axios.post('http://localhost:8080/api/clients')
+
+    localStorage.setItem('client_id', res.data.id)
+  } catch (e) {
+    console.error('Client init failed', e)
+  }
+  
+})
 
 const menu = () => {
   router.push('/menu')

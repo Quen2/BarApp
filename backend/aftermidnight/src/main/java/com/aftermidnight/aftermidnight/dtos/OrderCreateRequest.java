@@ -1,13 +1,10 @@
 package com.aftermidnight.aftermidnight.dtos;
 
 import java.util.List;
-
-import com.aftermidnight.aftermidnight.entities.Client;
-import com.aftermidnight.aftermidnight.entities.OrderItem;
+import java.util.UUID;
 
 public record OrderCreateRequest(
-    Client client,
-    String status,
+    UUID clientId,
     Integer tableNumber,
-    List<OrderItem> orderItems
+    List<OrderItemRequest> items
 ) {}
