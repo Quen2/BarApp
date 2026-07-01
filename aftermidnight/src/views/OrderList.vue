@@ -49,22 +49,25 @@
         <div class="space-y-2">
 
           <div
-            v-for="item in order.items"
+            v-for="item in order.orderItems"
             :key="item.id"
-            class="flex justify-between items-center bg-[#1c1c25] p-2 rounded"
+            class="flex justify-between items-center bg-[#1c1c25] p-3 rounded-lg"
           >
 
-            <div class="flex gap-2 items-center">
-              <span class="font-bold">
-                {{ item.cocktailSize.size }}
-              </span>
+            <div>
+              <p class="font-semibold text-[#E8E2D9]">
+                {{ item.cocktailSize.cocktail.name }}
+              </p>
 
-              <span class="text-xs text-[#6B6B6B]">
-                x{{ item.quantity }}
-              </span>
+              <p class="text-sm text-[#6B6B6B]">
+                {{ item.cocktailSize.size }} • x{{ item.quantity }}
+              </p>
             </div>
 
-            <span class="text-xs" :class="itemStatusClass(item.status)">
+            <span
+              class="text-xs font-medium"
+              :class="itemStatusClass(item.status)"
+            >
               {{ formatItemStatus(item.status) }}
             </span>
 
